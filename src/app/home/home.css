@@ -1,0 +1,91 @@
+/* Top 12 Teams Leaderboard Styles */
+
+.team-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.team-card:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.rank-number {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.medal-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+/* Champion - Rank 1 */
+.team-card.champion {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 165, 0, 0.1));
+    border-color: #ffd700;
+}
+
+.team-card.champion .rank-number {
+    background: linear-gradient(135deg, #ffd700, #ffb700);
+    color: #1a1a2e;
+}
+
+.team-card.champion .medal-title {
+    color: #ffd700;
+}
+
+/* Gold Medal - Ranks 2-4 */
+.team-card.gold {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.15), rgba(255, 152, 0, 0.08));
+    border-color: rgba(255, 193, 7, 0.5);
+}
+
+.team-card.gold .rank-number {
+    background: linear-gradient(135deg, #ffc107, #ff9800);
+    color: #1a1a2e;
+}
+
+.team-card.gold .medal-title {
+    color: #ffc107;
+}
+
+/* Silver Medal - Ranks 5-8 */
+.team-card.silver {
+    background: linear-gradient(135deg, rgba(192, 192, 192, 0.15), rgba(158, 158, 158, 0.08));
+    border-color: rgba(192, 192, 192, 0.5);
+}
+
+.team-card.silver .rank-number {
+    background: linear-gradient(135deg, #c0c0c0, #9e9e9e);
+    color: #1a1a2e;
+}
+
+.team-card.silver .medal-title {
+    color: #c0c0c0;
+}
+
+/* Bronze Medal - Ranks 9-12 */
+.team-card.bronze {
+    background: linear-gradient(135deg, rgba(205, 127, 50, 0.15), rgba(139, 90, 43, 0.08));
+    border-color: rgba(205, 127, 50, 0.5);
+}
+
+.team-card.bronze .rank-number {
+    background: linear-gradient(135deg, #cd7f32, #8b5a2b);
+    color: white;
+}
+
+.team-card.bronze .medal-title {
+    color: #cd7f32;
+}

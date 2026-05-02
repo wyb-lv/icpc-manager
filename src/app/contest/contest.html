@@ -1,0 +1,165 @@
+<div class="container-fluid p-4 h-100 d-flex flex-column">
+
+    <!-- Header Section -->
+    <div class="glass-panel p-3 mb-3 d-flex justify-content-between align-items-center flex-shrink-0">
+        <div>
+            <h3 class="fw-bold text-neon m-0"><i class="bi bi-flag-fill me-2"></i>CONTEST MANAGEMENT</h3>
+            <small class="">Create and manage your ICPC contests</small>
+        </div>
+
+        <button class="btn btn-neon d-flex align-items-center" (click)="openCreateModal()">
+            <i class="bi bi-plus-lg me-2"></i>Create New Contest
+        </button>
+    </div>
+
+    <!-- Contest List -->
+    <div class="glass-panel flex-grow-1 p-3 custom-scrollbar" style="overflow-y: auto;">
+
+        @if (contests().length === 0) {
+        <div class="text-center py-5 text-white">
+            <i class="bi bi-inbox fs-1 d-block mb-3"></i>
+            <h5>No contests yet</h5>
+            <p class="text-secondary">Click "Create New Contest" to get started</p>
+        </div>
+        } @else {
+        <div class="row g-3">
+            @for (contest of contests(); track contest.id) {
+            <div class="col-md-6 col-lg-4">
+                <div class="contest-card glass-panel p-3 h-100">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h5 class="text-white mb-0 fw-bold">{{ contest.name }}</h5>
+                        <span [class]="getStatusClass(contest.status)">{{ contest.status | uppercase }}</span>
+                    </div>
+
+                    <p class="text-secondary small mb-3">{{ contest.description || 'No description' }}</p>
+
+                    <div class="contest-info mb-3">
+                        <div class="d-flex align-items-center text-secondary mb-1">
+                            <i class="bi bi-calendar-event me-2"></i>
+                            <span>Date: {{ formatDate(contest.date) }}</span>
+                        </div>
+                        <div class="d-flex align-items-center text-secondary mb-1">
+                            <i class="bi bi-list-ol me-2"></i>
+                            <span>12 Problems (A-L)</span>
+                        </div>
+                        <div class="d-flex align-items-center text-secondary">
+                            <i class="bi bi-people me-2"></i>
+                            <span>{{ getTeamCount(contest) }} Teams</span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2 flex-wrap">
+                        <button class="btn btn-outline-success btn-sm" (click)="openTeamsModal(contest)">
+                            <i class="bi bi-people-fill me-1"></i>Teams
+                        </button>
+                        <button class="btn btn-outline-primary btn-sm flex-grow-1" (click)="viewScoreboard(contest)">
+                            <i class="bi bi-trophy me-1"></i>Scoreboard
+                        </button>
+                        <button class="btn btn-outline-secondary btn-sm" (click)="openEditModal(contest)">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+        }
+    </div>
+</div>
+
+<!-- Create/Edit Modal -->
+@if (isModalOpen()) {
+<div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.7);">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content glass-panel border-secondary">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title text-white">
+                    <i class="bi bi-flag me-2"></i>{{ isEditing() ? 'Edit Contest' : 'Create New Contest' }}
+                </h5>
+                <button type="button" class="btn-close btn-close-white" (click)="closeModal()"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label text-white">Contest Name *</label>
+                    <input type="text" class="form-control bg-dark text-white border-secondary" [ngModel]="formName()"
+                        (ngModelChange)="formName.set($event)" placeholder="Enter contest name">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label text-white">Description</label>
+                    <textarea class="form-control bg-dark text-white border-secondary" rows="3"
+                        [ngModel]="formDescription()" (ngModelChange)="formDescription.set($event)"
+                        placeholder="Enter contest description"></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label text-white">Contest Date</label>
+                    <input type="date" class="form-control bg-dark text-white border-secondary" [ngModel]="formDate()"
+                        (ngModelChange)="formDate.set($event)">
+                </div>
+            </div>
+            <div class="modal-footer border-secondary">
+                <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+                <button type="button" class="btn btn-neon" (click)="saveContest()" [disabled]="!formName()">
+                    <i class="bi me-1" [class.bi-plus-lg]="!isEditing()" [class.bi-check-lg]="isEditing()"></i>
+                    {{ isEditing() ? 'Update Contest' : 'Create Contest' }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+}
+
+<!-- Teams Selection Modal -->
+@if (isTeamsModalOpen()) {
+<div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.7);">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content glass-panel border-secondary">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title text-white">
+                    <i class="bi bi-people-fill me-2"></i>Manage Teams - {{ selectedContestForTeams()?.name }}
+                </h5>
+                <button type="button" class="btn-close btn-close-white" (click)="closeTeamsModal()"></button>
+            </div>
+            <div class="modal-body" style="max-height: 400px; overflow-y: auto;">
+                <p class="text-secondary mb-3">Select teams to add to this contest:</p>
+
+                @if (availableTeams().length === 0) {
+                <div class="text-center py-4 text-secondary">
+                    <i class="bi bi-inbox fs-3"></i>
+                    <p class="mt-2">No teams available. Create teams first in the Teams section.</p>
+                </div>
+                } @else {
+                <div class="list-group">
+                    @for (team of availableTeams(); track team.id) {
+                    <div class="list-group-item list-group-item-action bg-dark text-white border-secondary d-flex align-items-center"
+                        style="cursor: pointer;" (click)="toggleTeamSelection(team.id)">
+                        <input type="checkbox" class="form-check-input me-3" [checked]="isTeamSelected(team.id)"
+                            (click)="$event.stopPropagation()" (change)="toggleTeamSelection(team.id)">
+                        <div class="flex-grow-1">
+                            <div class="fw-bold">{{ team.name }}</div>
+                            <small class="text-secondary"><i class="bi bi-building me-1"></i>{{ team.university
+                                }}</small>
+                        </div>
+                        @if (isTeamSelected(team.id)) {
+                        <span class="badge bg-success"><i class="bi bi-check"></i></span>
+                        }
+                    </div>
+                    }
+                </div>
+                }
+            </div>
+            <div class="modal-footer border-secondary">
+                <div class="me-auto text-secondary">
+                    {{ selectedTeamIds().size }} team(s) selected
+                </div>
+                <button type="button" class="btn btn-secondary" (click)="closeTeamsModal()">Cancel</button>
+                <button type="button" class="btn btn-success" (click)="saveTeamsToContest()"
+                    [disabled]="selectedTeamIds().size === 0">
+                    <i class="bi bi-check-lg me-1"></i>Save Teams
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+}

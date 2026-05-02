@@ -1,0 +1,30 @@
+@charset "UTF-8";
+.sidebar-bg {
+  background-color: var(--bg-sidebar); /* Lấy từ file global styles.scss */
+  border-right: var(--glass-border);
+}
+
+.nav-link {
+  color: #94a3b8; /* Màu xám nhạt */
+  transition: all 0.3s;
+}
+
+.nav-link:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateX(5px);
+}
+
+/* Style cho mục đang được chọn (Active) */
+.active-neon {
+  background: linear-gradient(90deg, rgba(14, 165, 233, 0.2) 0%, transparent 100%);
+  border-left: 4px solid var(--neon-blue);
+  color: var(--neon-blue) !important;
+  text-shadow: 0 0 10px rgba(14, 165, 233, 0.4);
+}
+
+.active-neon i {
+  color: var(--neon-blue);
+}
+
+/*# sourceMappingURL=sidebar.css.map */

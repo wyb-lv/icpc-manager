@@ -1,0 +1,141 @@
+<div class="container-fluid p-4 h-100 d-flex flex-column">
+
+  <div class="glass-panel p-3 mb-3 d-flex justify-content-between align-items-center flex-shrink-0">
+    <div class="d-flex align-items-center">
+      <button class="btn btn-outline-secondary me-3" (click)="backToContests()">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <div>
+        <h3 class="fw-bold text-neon m-0">
+          <i class="bi bi-trophy-fill me-2"></i>
+          {{ currentContest()?.name || 'SCOREBOARD' }}
+        </h3>
+        <small class="">Live Update • Realtime Ranking</small>
+      </div>
+    </div>
+
+    <!-- Contest Timer (Click to Start/Stop) -->
+    <div class="d-flex align-items-center">
+      <div class="glass-panel px-4 py-2 d-flex align-items-center me-3" (click)="timerService.toggleTimer()"
+        style="cursor: pointer;" [class.border-success]="timerService.isTimerRunning()"
+        [class.border-2]="timerService.isTimerRunning()">
+        <i class="fs-4 me-2" [class.bi-play-circle-fill]="!timerService.isTimerRunning()"
+          [class.bi-pause-circle-fill]="timerService.isTimerRunning()"
+          [class.text-success]="timerService.isTimerRunning()" [class.text-white]="!timerService.isTimerRunning()"></i>
+        <div>
+          <small class="d-block text-secondary" style="font-size: 0.7rem;">
+            {{ timerService.isTimerRunning() ? 'CONTEST RUNNING' : 'CLICK TO START' }}
+          </small>
+          <span class="fw-bold fs-5" [class.text-success]="timerService.isTimerRunning()"
+            [class.text-white]="!timerService.isTimerRunning()">
+            {{ timerService.formattedTime() }}
+          </span>
+        </div>
+      </div>
+
+      <div class="input-group" style="width: 250px;">
+        <span class="input-group-text bg-transparent border-secondary text-white"><i class="bi bi-search"></i></span>
+        <input type="text" [ngModel]="searchText()" (ngModelChange)="searchText.set($event)"
+          class="form-control bg-transparent text-white border-secondary" placeholder="Search team or university...">
+      </div>
+
+      <!-- Clear All Button -->
+      <button class="btn btn-outline-danger ms-3 d-flex align-items-center" (click)="clearAllResults()">
+        <i class="bi bi-trash me-2"></i>Clear All
+      </button>
+    </div>
+  </div>
+
+  <div class="glass-panel table-responsive flex-grow-1 custom-scrollbar">
+    <table class="table table-dark table-borderless text-center align-middle mb-0">
+      <thead class="sticky-top glass-header">
+        <tr>
+          <th class="text-start ps-4" style="min-width: 250px;">Row</th>
+          @for (p of problems; track p) {
+          <th class="text-warning fw-bold" style="min-width: 60px;">{{ p }}</th>
+          }
+          <th style="min-width: 80px;">Total</th>
+          <th style="min-width: 80px;">Penalty</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (team of filteredTeams(); track team.id; let i = $index) {
+        <tr class="team-row border-bottom border-secondary">
+
+          <td class="text-start ps-4">
+            <div class="d-flex align-items-center justify-content-between">
+              <div class="d-flex align-items-center">
+                <div class="rank-badge me-3" [class.rank-top]="team.rank <= 3">{{ team.rank }}</div>
+                <div>
+                  <div class="fw-bold fs-5 text-white">{{ team.name }}</div>
+                  <div class="small "><i class="bi bi-building"></i> {{ team.university }}</div>
+                </div>
+              </div>
+              <button class="btn btn-outline-danger btn-sm" (click)="deleteTeamFromContest(team)"
+                title="Remove team from contest">
+                <i class="bi bi-trash"></i>
+              </button>
+            </div>
+          </td>
+
+          @for (p of problems; track p) {
+          <td class="p-2">
+            <div class="status-cell" [class.status-ac]="team.problems?.[p]?.status === 'AC'"
+              [class.status-wa]="team.problems?.[p]?.status === 'WA'" (click)="openJudgeModal(team, p)">
+
+              @if (team.problems?.[p]?.status === 'AC') {
+              <span class="fs-5 fw-bold text-white">AC</span>
+              }
+
+              @if (team.problems?.[p]?.status === 'WA') {
+              <span class="fs-5 fw-bold text-white">WA</span>
+              }
+            </div>
+          </td>
+          }
+
+          <td class="fw-bold text-success fs-4">{{ team.totalSolved || 0 }}</td>
+          <td class=" fw-bold">{{ team.totalPenalty || 0 }}</td>
+        </tr>
+        } @empty {
+        <tr>
+          <td colspan="15" class="text-center py-5 text-white">
+            <i class="bi bi-inbox fs-1"></i>
+            <p>No team data available.</p>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Grade Modal -->
+<div class="modal fade show d-block" tabindex="-1" *ngIf="isModalOpen()" style="background-color: rgba(0,0,0,0.7);">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content glass-panel border-secondary">
+      <div class="modal-header border-secondary">
+        <h5 class="modal-title text-white">
+          <i class="bi bi-pencil-square me-2"></i>Grading Problem {{ selectedProblem() }}
+        </h5>
+        <button type="button" class="btn-close btn-close-white" (click)="closeJudgeModal()"></button>
+      </div>
+      <div class="modal-body text-center py-4">
+        <p class="text-secondary mb-4">Select the result for Team <strong class="text-white">{{ selectedTeam()?.name
+            }}</strong></p>
+
+        <div class="d-flex justify-content-center gap-3">
+          <button class="btn btn-success btn-lg px-4" (click)="submitGrade('AC')">
+            <i class="bi bi-check-lg me-2"></i>ACCEPT
+          </button>
+          <button class="btn btn-danger btn-lg px-4" (click)="submitGrade('WA')">
+            <i class="bi bi-x-lg me-2"></i>REJECT
+          </button>
+        </div>
+      </div>
+      <div class="modal-footer border-secondary">
+        <button type="button" class="btn btn-secondary" (click)="submitGrade('CANCEL')">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

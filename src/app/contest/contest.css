@@ -1,0 +1,69 @@
+/* Contest Card Styling */
+.contest-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: default;
+}
+
+.contest-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(14, 165, 233, 0.15);
+}
+
+/* Neon Button */
+.btn-neon {
+    background: linear-gradient(135deg, #0ea5e9, #06b6d4);
+    border: none;
+    color: white;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-neon:hover {
+    background: linear-gradient(135deg, #06b6d4, #0ea5e9);
+    box-shadow: 0 0 20px rgba(14, 165, 233, 0.5);
+    transform: translateY(-2px);
+    color: white;
+}
+
+.btn-neon:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Contest Info Styling */
+.contest-info {
+    font-size: 0.85rem;
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Form inputs in dark mode */
+.form-control::placeholder,
+.form-select::placeholder {
+    color: #64748b;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #0ea5e9;
+    box-shadow: 0 0 0 0.2rem rgba(14, 165, 233, 0.25);
+}
+
+/* Date input styling for dark mode */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}

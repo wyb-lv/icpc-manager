@@ -1,0 +1,32 @@
+@charset "UTF-8";
+:host {
+  display: block;
+  height: 100vh; /* Bắt buộc: Chiếm toàn bộ chiều cao màn hình */
+  overflow: hidden;
+}
+
+.app-container {
+  background-color: var(--bg-dark); /* Màu nền lấy từ styles.scss global */
+}
+
+/* Cố định chiều rộng Sidebar */
+.sidebar-wrapper {
+  width: 260px;
+  flex-shrink: 0;
+  height: 100%;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Wrapper bên phải */
+.content-wrapper {
+  background: var(--bg-dark);
+}
+
+/* Responsive: Ẩn Sidebar trên mobile (nếu cần sau này) */
+@media (max-width: 768px) {
+  .sidebar-wrapper {
+    display: none; /* Hoặc code logic toggle sau */
+  }
+}
+
+/*# sourceMappingURL=app.css.map */

@@ -1,0 +1,115 @@
+.glass-panel {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+.glass-panel:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.text-neon {
+  color: #0ea5e9;
+  text-shadow: 0 0 10px rgba(14, 165, 233, 0.3);
+}
+
+.form-control {
+  background-color: rgba(0, 0, 0, 0.8) !important;
+  /* Almost black background */
+  color: #ffffff !important;
+  /* Pure white text */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.form-control::placeholder {
+  color: rgba(255, 255, 255, 0.6) !important;
+  /* Brighter placeholder */
+}
+.form-control:focus {
+  background-color: #000000 !important;
+  border-color: #0ea5e9;
+  box-shadow: 0 0 0 0.25rem rgba(14, 165, 233, 0.25);
+  color: #ffffff !important;
+}
+
+.form-label {
+  color: #e2e8f0 !important;
+  /* Brighter label color */
+  font-weight: 500;
+}
+
+.input-group-text:has(+ .form-control:focus) {
+  border-color: #0ea5e9;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  border: none;
+  transition: all 0.3s ease;
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(14, 165, 233, 0.4);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border: none;
+}
+.btn-success:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+}
+
+.btn-outline-warning:hover {
+  transform: scale(1.1);
+}
+
+.btn-outline-danger:hover {
+  transform: scale(1.1);
+}
+
+.table-dark {
+  --bs-table-bg: transparent;
+}
+.table-dark thead {
+  background: rgba(14, 165, 233, 0.1);
+  border-bottom: 2px solid #0ea5e9;
+}
+.table-dark thead th {
+  color: #0ea5e9;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+.table-dark tbody tr {
+  transition: all 0.2s ease;
+}
+.table-dark tbody tr:hover {
+  background: rgba(14, 165, 233, 0.1);
+  transform: scale(1.01);
+}
+
+.badge {
+  padding: 0.4em 0.8em;
+  font-weight: 500;
+  border-radius: 6px;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.glass-panel {
+  animation: slideDown 0.3s ease;
+}
+
+/*# sourceMappingURL=teams.css.map */
