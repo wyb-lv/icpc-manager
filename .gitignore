@@ -2,9 +2,13 @@
 
 # Environment variables
 .env
+package-lock.json
+node_modules/
 
 # Firebase service account key
 server/serviceAccountKey.json
+server/package-lock.json
+server/node_modules/
 
 # Compiled output
 /dist
